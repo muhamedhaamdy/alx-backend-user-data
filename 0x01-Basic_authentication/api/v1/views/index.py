@@ -27,6 +27,6 @@ def stats() -> str:
 
 @app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
 def unauthorized():
-   """"""
+   """unauthorized get request"""
   #  abort(401)
    return jsonify({"error": "Unauthorized"}), 401

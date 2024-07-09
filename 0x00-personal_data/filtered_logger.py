@@ -60,3 +60,20 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     connector = mysql.connector.connection.MySQLConnection(
         user=username, password=password, host=host, database=db_name)
     return connector
+
+
+def main() -> None:
+    '''retrieve all rows in the users table'''
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+    for row in cursor:
+        row_str = '; '.join(f'{field}={value}' for field, value in zip(cursor.column_names, row))
+        logger.info(row_str)
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()

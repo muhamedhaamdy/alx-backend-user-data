@@ -28,8 +28,7 @@ class BasicAuth(Auth):
     def extract_user_credentials(self, decoded_base64_authorization_header):
         '''extract_user_credentials method'''
         if decoded_base64_authorization_header is None\
-                or not isinstance(decoded_base64_authorization_header, str)\
-                or ':' not in decoded_base64_authorization_header:
+                or not isinstance(decoded_base64_authorization_header, str):
             return (None, None)
         return tuple(decoded_base64_authorization_header.split(':', 1))
 

@@ -47,18 +47,18 @@ class BasicAuth(Auth):
         except Exception:
             return None
         return None
-    
+
     def current_user(self, request=None):
         '''current user method'''
         authorization_header = self.authorization_header(request)
         if not authorization_header:
             return None
-        base64_authorization_header = \
+        base64_header = \
             self.extract_base64_authorization_header(authorization_header)
-        if not base64_authorization_header:
+        if not base64_header:
             return None
         decoded_base64_authorization_header = \
-            self.decode_base64_authorization_header(base64_authorization_header)
+            self.decode_base64_authorization_header(base64_header)
         if not decoded_base64_authorization_header:
             return None
         user_credentials = \

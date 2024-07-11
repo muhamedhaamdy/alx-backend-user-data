@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''handles all routes for the Session authentication'''
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from models.user import User
 import os
 
@@ -31,3 +31,13 @@ def retrieve_user_by_email():
             return response
 
     return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
+def destroy_session():
+    '''deletes the user session logout'''
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+    return jsonify({}), 200

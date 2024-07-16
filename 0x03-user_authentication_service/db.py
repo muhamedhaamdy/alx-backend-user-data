@@ -64,7 +64,7 @@ class DB:
         """
         user = self.find_user_by(id=user_id)
         VALID_KEYS = ['id', 'email', 'hashed_password', 'session_id',
-                'reset_token']        
+                      'reset_token']
         for k, v in kwargs.items():
             if k not in VALID_KEYS:
                 raise ValueError

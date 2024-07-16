@@ -59,18 +59,14 @@ class DB:
         except InvalidRequestError:
             raise InvalidRequestError("Invalid filter arguments provided.")
 
-    def update_user(self, id: int, **kwargs) -> None:
-        '''update a user by arbitrary keyword arguments.
-        Args:
-            id: the id of the desired uesr
-            **kwargs: Arbitrary keyword arguments.
-        Returns:
-            None
-        '''
-        user = self.find_user_by(id=id)
-        for key, value in kwargs.items():
-            if hasattr(user, key):
-                setattr(user, key, value)
-            else:
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update user based on user ID
+        """
+        user = self.find_user_by(id=user_id)
+        VALID_KEYS = ['id', 'email', 'hashed_password', 'session_id',
+                'reset_token']        
+        for k, v in kwargs.items():
+            if k not in VALID_KEYS:
                 raise ValueError
+            setattr(user, k, v)
         self._session.commit()

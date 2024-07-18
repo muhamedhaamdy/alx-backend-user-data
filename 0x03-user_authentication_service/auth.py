@@ -3,6 +3,7 @@
 import bcrypt
 from db import DB
 from user import User
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class Auth:
@@ -14,15 +15,15 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         ''' signup for the user with email and password '''
-        find_user =\
-            self._db._session.query(User).filter_by(email=email).first()
-        if find_user:
-            raise ValueError(f'User {find_user.email} already exists')
-        else:
+        try:
+            find_user = self._db.find_user_by(email=email)
+        except NoResultFound:
             hash = _hash_password(password)
-            new_user = User(email=email, hashed_password=hash)
-            self._db._session.add(new_user)
-            self._db._session.commit()
+            user = self._db.add_user(email, hash)
+            return user
+
+        else:
+            raise ValueError(f'User {email} already exists')
 
 
 def _hash_password(password: str) -> bytes:

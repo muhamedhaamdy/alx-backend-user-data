@@ -42,13 +42,12 @@ def login():
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
 def logout():
-    session_id = request.form.get('session_id')
-    try:
-        user = AUTH._db.find_user_by(session_id=session_id)
-        AUTH.destroy_session(session_id)
-        return redirect('/')
-    except NoResultFound:
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
         abort(403)
+    AUTH.destroy_session(session_id)
+    return redirect('/')
 
 
 if __name__ == "__main__":

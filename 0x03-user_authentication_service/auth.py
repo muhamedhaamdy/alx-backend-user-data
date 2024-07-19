@@ -64,11 +64,12 @@ class Auth:
         ''' generate reset passwrod token '''
         try:
             user = self._db.find_user_by(email=email)
-            pwd_token = _generate_uuid()
-            self._db.update_user(user.id, reset_toke=pwd_token)
-            return pwd_token
         except NoResultFound:
             raise ValueError
+        
+        pwd_token = _generate_uuid()
+        self._db.update_user(user.id, reset_toke=pwd_token)
+        return pwd_token
 
 
 def _hash_password(password: str) -> bytes:
